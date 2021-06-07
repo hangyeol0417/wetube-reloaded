@@ -7,7 +7,7 @@
         "url": "git+https://github.com/hangyeol0417/wetube-reloaded.git"
     },
     "scripts": {
-        "dev": "nodemon --exec babel-node src/server.js"
+        "dev": "nodemon --exec babel-node src/init.js"
     },
     "author": "Hangyeol Lee<magul1234@naver.com>",
     "license": "MIT",
