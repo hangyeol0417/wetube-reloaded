@@ -1,5 +1,4 @@
 import User from "../models/User";
-import Video from "../models/Video";
 import fetch from "node-fetch"
 import bcrypt from "bcrypt"
 
@@ -118,7 +117,7 @@ export const finishGithubLogin = async(req, res) => {
         let user = await User.findOne({ email: emailObj.email });
         if (!user) {
             user = await User.create({
-                avataUrl: userData.avatar_url,
+                avatarUrl: userData.avatar_url,
                 name: userData.name ? userData.name : "Unknown",
                 username: userData.login,
                 email: emailObj.email,
@@ -141,7 +140,7 @@ export const getEdit = (req, res) => {
 export const PostEdit = async(req, res) => {
     const {
         session: {
-            user: { _id, avataUrl },
+            user: { _id, avatarUrl },
         },
         body: { name, email, username, location },
         file,
@@ -163,7 +162,7 @@ export const PostEdit = async(req, res) => {
     }
     try {
         const updatedUser = await User.findByIdAndUpdate(_id, {
-            avataUrl: file ? file.path : avataUrl,
+            avatarUrl: file ? file.path : avatarUrl,
             name,
             email,
             username,
@@ -209,7 +208,6 @@ export const postChangePassword = async(req, res) => {
     }
     if (newPassword !== newPasswordConfirmation) {
         return res.status(400).render("users/change-password", { pageTitle: "Change Password", errorMessage: "The password does not match the confirmation" })
-
     }
     console.log(user.password)
     user.password = newPassword;
@@ -222,8 +220,13 @@ export const postChangePassword = async(req, res) => {
 
 export const see = async(req, res) => {
     const { id } = req.params;
-    const user = await User.findById(id).populate("videos");
-    console.log(user)
+    const user = await User.findById(id).populate({
+        path: "videos",
+        populate: {
+            path: "owner",
+            model: "User",
+        },
+    });
     if (!user) {
         return res.status(404).render("404", { pageTitle: "User not found." });
     }
