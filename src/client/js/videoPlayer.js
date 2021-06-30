@@ -1,4 +1,5 @@
 import fetch from "node-fetch";
+import { async } from "regenerator-runtime";
 
 const video = document.querySelector("video");
 const playBtn = document.getElementById("play");
