@@ -149,18 +149,15 @@ export const deleteComment = async(req, res) => {
     const video = await Video.findOne({ comments: id })
     const user = await User.findOne({ comments: id })
     const comment = video.comments.remove(id)
-    console.log(comment)
-    console.log(video.comments)
 
-    user.comments = comment
-    await user.save()
-    console.log(video.comments)
+
+    //user.comments = comment
+    //await user.save()
+    //console.log(video.comments)
 
     video.comments = comment
     await video.save()
-    console.log(video.comments)
-
-    //Video.findOneAndDelete({ "comments": id }, { collation: false })
+        //Video.findOneAndDelete({ "comments": id }, { collation: false })
 
     await Comment.findByIdAndDelete(id);
     return res.sendStatus(200);
